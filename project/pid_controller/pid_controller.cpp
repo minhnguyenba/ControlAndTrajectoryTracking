@@ -15,28 +15,27 @@ PID::PID() {}
 
 PID::~PID() {}
 
-void PID::Init(double Kpi, double Kii, double Kdi, double output_lim_maxi, double output_lim_mini) {
+void PID::Init(double Kp, double Ki, double Kd, double output_lim_max, double output_lim_min) {
    /**
-   * TODO: Initialize PID coefficients (and errors, if needed)
+   * TODO: Initialize PID coefficients and errors, if needed
    **/
-    Kp = Kpi;
-    Ki = Kii;
-    Kd = Kdi;
-    output_lim_max = output_lim_maxi;
-    output_lim_min = output_lim_mini;
-    p_error = 0.0;
-    i_error = 0.0;
-    d_error = 0.0;
-    delta_time = 0;
+   kP = Kp;
+   kI = Ki;
+   kD = Kd;
+   output_limMax = output_lim_max;
+   output_limMin = output_lim_min;
+   p_error = 0.0;
+   i_error = 0.0;
+   d_error = 0.0;
+   delta_time = 0;
 }
 
-
 void PID::UpdateError(double cte) {
-   /**
-   * TODO: Update PID errors based on cte.
-   **/
+  /**
+  * TODO: Update PID errors based on cte.
+  **/
    // Calculate the differential error (error derivative)
-   if (delta_time>0) {
+   if (delta_time > 0) {
      d_error = (cte - p_error) / delta_time;
    } else {
      d_error = 0.0;
@@ -47,6 +46,7 @@ void PID::UpdateError(double cte) {
 
    // Update the proportional error
    p_error = cte;
+
 }
 
 double PID::TotalError() {
@@ -54,14 +54,14 @@ double PID::TotalError() {
    * TODO: Calculate and return the total error
     * The code should return a value in the interval [output_lim_mini, output_lim_maxi]
    */
-    double control;
-    control = Kp * p_error + Ki * i_error + Kd * d_error;
-    if (control < output_lim_min) {
-      control = output_lim_min;
-    } else if (control > output_lim_max) {
-      control = output_lim_max;
+    double totalError;
+    totalError = kP * p_error + kI * i_error + kD * d_error;
+    if (totalError < output_limMin) {
+      totalError = output_limMin;
+    } else if (totalError > output_limMax) {
+      totalError = output_limMax;
     }
-    return control;
+    return totalError;
 }
 
 double PID::UpdateDeltaTime(double new_delta_time) {
@@ -69,4 +69,5 @@ double PID::UpdateDeltaTime(double new_delta_time) {
    * TODO: Update the delta time with new value
    */
    delta_time = new_delta_time;
+   return delta_time;
 }
