@@ -1,6 +1,6 @@
 # Control and Trajectory Tracking for Autonomous Vehicle
 
-In this project, you will apply the skills you have acquired in this course to design a Proportional-Integral-Derivative (PID) controller to perform vehicle trajectory tracking. Given a trajectory as an array of locations, and a simulation environment, you will design and code a PID controller and test its efficiency on the CARLA simulator used in the industry.
+In this project, you will apply the skills you have acquired in this course to design a Proportional-Integral-Derivative (PID) controller to perform vehicle trajectory tracking. Given a trajectory as an array of locations and a simulation environment, you will design and code a PID controller and test its efficiency on the CARLA simulator used in the industry.
 
 ## Dependency - Udacity VM Workspace
 The state code in this repository is aligned to run on the Udacity VM workspace. Refer to the classroom page **Ubuntu VM Workspace - Overview** to learn how to access the VM workspace and its restrictions and best practices. 
@@ -112,7 +112,7 @@ cd ..
 If the execution fails silently, you can use **ctrl + C** to stop, and try again. 
 ※ Or you must restart the carla simulation
 
-Another possible error you may get is `bind failed. Error: Address already in use`. In such a case, you can kill the process occupying the required port using the commands below. You also should restart carla simulation to remove the old cars from previous running
+Another possible error you may get is `bind failed. Error: Address already in use`. In such a case, you can kill the process occupying the required port using the commands below. You also should restart carla simulation to remove the old cars from the previous running
 
 ```bash
 ps -aux | grep carla
@@ -122,11 +122,11 @@ kill id
 
 #### You can use Ctrl + C to stop running the simulation. The values of the error and the pid command are saved in thottle_data.txt and steer_data.txt. Plot the saved values using the command:
 ```bash
-# Run the command in "project" folder
+# Run the command in the "project" folder
 python3 plot_pid.py
 ```
 
-You might need to install a few additional python modules:
+You might need to install a few additional Python modules:
 ```bash
 pip3 install pandas
 pip3 install matplotlib
@@ -147,23 +147,23 @@ I built the steer and throttle controller so that the car follows the trajectory
 ### Step 1: Build the PID controller object
 Complete the TODO in the [pid_controller.h]() and [pid_controller.cpp](https://github.com/udacity/nd013-c6-control-starter/blob/master/project/pid_controller/pid_controller.cpp).
 
-Run the simulator and see in the desktop mode the car in the CARLA simulator. Take a screenshot and add it to your report. The car should not move in the simulation.
-To find this result shown in image below and the car not moving
+Run the simulator and see the desktop mode of the car in the CARLA simulator. Take a screenshot and add it to your report. The car should not move in the simulation.
+This result is shown in the image below and the car not moving
 
 <img src='images/p6_1_2.png'/>
 
 ### Step 2: PID controller for throttle:
-The last point of the vector v_points and current velocity were used to calculate the velocity error. After some experimenting and fine tuning, the PID coefficients were set to: kp = 0.20, ki = 0.05, kd = 0.1 and output limited to [-1, 1]
+The last point of the vector v_points and current velocity were used to calculate the velocity error. After some experimenting and fine-tuning, the PID coefficients were set to kp = 0.20, ki = 0.05, kd = 0.1, and output was limited to [-1, 1]
 
 <img src='images/p6_2_1.png'/>
 
-I also tried to use closest point replace for last point of v_points to calculate but the result was the same.
+I also tried to use the closest point replace for the last point of v_points to calculate but the result was the same.
 
 ### Step 3: PID controller for steer:
 The error between the actual steer and the desired steer was calculated and the coefficients for the PID controller were tuned. The final values were as below: kp = 0.35, ki = 0.0012, kd = 0.9 and output limited to [-1.2, 1.2]
 <img src='images/p6_3_1.png'/>
 
-I also tried to use closest point replace for last point of v_points to calculate but the result was the same.
+I also tried to use the closest point to replace for last point of v_points to calculate but the result was the same.
 
 ### Step 4: Evaluate the PID efficiency
 Finally the evaluation of the results
@@ -178,13 +178,13 @@ After a bunch of PID parameter sets for steer and throttle, I had the result as 
 | <ul><li>Steer: P(0.25), I(0.01), D(0.25)</li><li>P(0.1), I(0.05), D(0.1)</li></ul> |  <img width="1604" alt="" src="images/new_steer_set3.png">|<img width="1604" alt="" src="images/new_throttle_set3.png">|
 | <ul><li>Steer: P(0.35), I(0.0012), D(0.9)</li><li>P(0.2), I(0.001), D(0.3)</li></ul>  |  <img width="1604" alt="" src="images/new_steer_set4.png">|<img width="1604" alt="" src="images/new_throttle_set4.png">|
 
-- By comparing the plots of reference test with other tests, we can see that increasing K_I and K_D significantly reduces the steer errors and throttle errors.
-- From plots of Set 3 and Set 3, we can conclude that increasing K_P of steer control reduce the steer error.
+- By comparing the plots of the reference test with other tests, we can see that increasing K_I and K_D significantly reduces the steer errors and throttle errors.
+- From plots of Set 3 and Set 4, we can conclude that increasing K_P of steer control reduces the steer error.
 - Throttle control in general is unstable in all conditions.
-- Large K_I of throttle results large throttle error (Set 1 ~ 3). Small K_I around O(1e-3) - O(1e-2) would be ideal (set4).
-- Best result is in set 4
+- Large K_I of throttle results in large throttle error (Set 1 ~ 3). Small K_I around O(1e-3) - O(1e-2) would be ideal (set4).
+The best result is in set 4
 
-#### Q2- What is the effect of the PID according to the plots, how each part of the PID affects the control command?
+#### Q2- What is the effect of the PID according to the plots, how does each part of the PID affect the control command?
 
 The proportional gain (Kp) [Amplifies the error signal] determines how much the controller responds to the current error. A high value of Kp will cause the controller to respond more aggressively to the error, but may also cause overshooting and instability.
 
@@ -195,13 +195,13 @@ The derivative gain (Kd) [Reduce overshoot and oscillations] determines how much
 #### Rest of the questions
 - Q: How would you design a way to automatically tune the PID parameters?
 
-  A: Using Twiddle as in lessons it will iterate throght the code to find the best PID parameters to have minimum error
+  A: Using Twiddle as in lessons it will iterate through the code to find the best PID parameters to have minimum error
   
-- Q: PID controller is a model free controller, i.e. it does not use a model of the car. Could you explain the pros and cons of this type of controller?
+- Q: PID controller is a model-free controller, i.e. it does not use a model of the car. Could you explain the pros and cons of this type of controller?
 
-  A: Pros: it is easy to understand and can be used in many systems and don't need a model of the system
+  A: Pros: it is easy to understand can be used in many systems and doesn't need a model of the system
 
-     Cons: Not so easy to tune and not that accurate as other controllers that use the system model
+     Cons: Not so easy to tune and not as accurate as other controllers that use the system model
 
 - Q: (Optional) What would you do to improve the PID controller?
-  A: There are some better tunned parameters by using Twiddle, Ziegler-Nichols method 
+  A: There are some better-tunned parameters by using Twiddle, Ziegler-Nichols method 
